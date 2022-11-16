@@ -5,9 +5,13 @@ import { CustomError } from './interfaces/error.js';
 import { thingRouter } from './router/thing.js';
 
 export const app = express();
+app.disable('x-powered-by');
+const corsOptions = {
+    origin: '*',
+};
 
 app.use(morgan('dev'));
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 const template = `
     <body style='align'>
