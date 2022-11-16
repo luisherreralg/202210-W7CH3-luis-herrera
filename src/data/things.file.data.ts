@@ -1,19 +1,34 @@
 import fs from 'fs/promises';
+import mongoose, { Model, model, Mongoose, Schema } from 'mongoose';
 import * as dotenv from 'dotenv';
-dotenv.config();
+dotenv.config({ path: '../../.env' });
 import { Thing, Things } from '../interfaces/thing.js';
 import { Data, id } from './data.js';
+const uri = `mongodb+srv://${process.env.USER}:${process.env.PW}@${process.env.CLUSTER}/?retryWrites=true&w=majority`;
 
 export class ThingFileData implements Data<Thing> {
+    url: string;
+    thingSchema: Schema<Thing>;
     dataFileURL: string;
+
     constructor() {
-        this.dataFileURL = process.env.DATA_FILE || '';
+        this.url = `mongodb+srv://${process.env.USER}:${process.env.PW}@${process.env.CLUSTER}/ThingsCollection?retryWrites=true&w=majority`;
+        this.thingSchema = new Schema({
+            title: String,
+            id: Number,
+        });
+        this.dataFileURL = 'src/data/things.json';
     }
 
     async getAll(): Promise<Thing[]> {
-        return fs
-            .readFile(this.dataFileURL, 'utf-8')
-            .then((data) => JSON.parse(data).things as Thing[]);
+        // return fs
+        //     .readFile(this.dataFileURL, 'utf-8')
+        //     .then((data) => JSON.parse(data).things as Thing[]);
+        const Thing = this.#createModel(this.thingSchema);
+        const conector = await mongoose.connect(uri);
+        const data = await Thing.find({});
+        conector.disconnect();
+        return data;
     }
 
     async get(id: id): Promise<Thing> {
@@ -60,5 +75,9 @@ export class ThingFileData implements Data<Thing> {
 
     #saveData(data: Things) {
         return fs.writeFile(this.dataFileURL, JSON.stringify(data));
+    }
+
+    #createModel(Scheme: Schema<Thing>) {
+        return model('Thing', Scheme, 'things');
     }
 }
