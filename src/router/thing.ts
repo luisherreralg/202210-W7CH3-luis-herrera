@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { ThingController } from '../controllers/things.js';
-import { ThingFileData } from '../data/things.file.data.js';
+import { ThingFileData } from '../data/things.mongo.data.js';
 
 export const thingRouter = Router();
 
