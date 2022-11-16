@@ -1,15 +1,15 @@
-import fs from 'fs/promises';
-import mongoose, { Model, model, Mongoose, Schema } from 'mongoose';
+import mongoose, { model, Schema } from 'mongoose';
 import * as dotenv from 'dotenv';
 dotenv.config({ path: '../../.env' });
-import { Thing, Things } from '../interfaces/thing.js';
+import { Thing } from '../interfaces/thing.js';
 import { Data, id } from './data.js';
 
 const thingSchema = new Schema({
     title: String,
     id: String,
 });
-const Thing = model('Thing', thingSchema, 'Things');
+
+const ThingModel = model('Thing', thingSchema, 'Things');
 export class ThingFileData implements Data<Thing> {
     dataFileURL: string;
     constructor() {
@@ -23,7 +23,7 @@ export class ThingFileData implements Data<Thing> {
         const uri = `mongodb+srv://${process.env.USER}:${process.env.PW}@${process.env.CLUSTER}/ThingsCollection?retryWrites=true&w=majority`;
 
         const conector = await mongoose.connect(uri);
-        const data = await Thing.find({});
+        const data = await ThingModel.find({});
         conector.disconnect();
         return data as Thing[];
     }
@@ -32,7 +32,7 @@ export class ThingFileData implements Data<Thing> {
         const uri = `mongodb+srv://${process.env.USER}:${process.env.PW}@${process.env.CLUSTER}/ThingsCollection?retryWrites=true&w=majority`;
 
         const conector = await mongoose.connect(uri);
-        const data = await Thing.find({
+        const data = await ThingModel.find({
             _id: id,
         });
         conector.disconnect();
@@ -43,7 +43,7 @@ export class ThingFileData implements Data<Thing> {
         const uri = `mongodb+srv://${process.env.USER}:${process.env.PW}@${process.env.CLUSTER}/ThingsCollection?retryWrites=true&w=majority`;
 
         const conector = await mongoose.connect(uri);
-        const data = await Thing.create(newThing);
+        const data = await ThingModel.create(newThing);
         conector.disconnect();
         return data as Thing;
     }
@@ -52,7 +52,7 @@ export class ThingFileData implements Data<Thing> {
         const uri = `mongodb+srv://${process.env.USER}:${process.env.PW}@${process.env.CLUSTER}/ThingsCollection?retryWrites=true&w=majority`;
 
         const conector = await mongoose.connect(uri);
-        const data = await Thing.findByIdAndUpdate(id, {
+        const data = await ThingModel.findByIdAndUpdate(id, {
             title: 'No sé hacer patch',
         });
         conector.disconnect();
@@ -63,7 +63,7 @@ export class ThingFileData implements Data<Thing> {
         const uri = `mongodb+srv://${process.env.USER}:${process.env.PW}@${process.env.CLUSTER}/ThingsCollection?retryWrites=true&w=majority`;
 
         const conector = await mongoose.connect(uri);
-        await Thing.deleteOne({
+        await ThingModel.deleteOne({
             _id: id,
         });
         conector.disconnect();
