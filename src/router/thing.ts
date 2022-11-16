@@ -7,7 +7,7 @@ export const thingRouter = Router();
 const controller = new ThingController(new ThingFileData());
 
 thingRouter.get('/', controller.getAll.bind(controller));
-thingRouter.get('/:id', controller.get.bind(controller));
-thingRouter.post('/', controller.post.bind(controller));
-thingRouter.patch('/:id', controller.patch.bind(controller));
-thingRouter.delete('/:id', controller.delete.bind(controller));
+thingRouter.get('/get/:id', controller.get.bind(controller));
+thingRouter.post('/post', controller.post.bind(controller));
+thingRouter.patch('/patch/:id', controller.patch.bind(controller));
+thingRouter.delete('/delete/:id', controller.delete.bind(controller));

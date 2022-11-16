@@ -5,10 +5,10 @@ import { Thing } from '../interfaces/thing.js';
 
 export class ThingController {
     constructor(public dataModel: Data<Thing>) {}
-
     async getAll(req: Request, resp: Response, next: NextFunction) {
         try {
             const data = await this.dataModel.getAll();
+            resp.setHeader('Content-type', 'application/json');
             resp.json(data).end();
         } catch (error) {
             const httpError = new HTTPError(
@@ -23,7 +23,7 @@ export class ThingController {
 
     async get(req: Request, resp: Response, next: NextFunction) {
         try {
-            const data = await this.dataModel.get(+req.params.id);
+            const data = await this.dataModel.get(req.params.id);
             resp.json(data).end();
         } catch (error) {
             if ((error as Error).message === 'Not found id') {
@@ -72,7 +72,7 @@ export class ThingController {
     async patch(req: Request, resp: Response, next: NextFunction) {
         try {
             const updateThing = await this.dataModel.patch(
-                +req.params.id,
+                req.params.id,
                 req.body
             );
             resp.json(updateThing).end();
@@ -98,7 +98,7 @@ export class ThingController {
 
     async delete(req: Request, resp: Response, next: NextFunction) {
         try {
-            await this.dataModel.delete(+req.params.id);
+            await this.dataModel.delete(req.params.id);
             resp.json({}).end();
         } catch (error) {
             if ((error as Error).message === 'Not found id') {

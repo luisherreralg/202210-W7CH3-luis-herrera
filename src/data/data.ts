@@ -1,4 +1,4 @@
-export type id = number;
+export type id = string;
 
 export interface Data<T> {
     getAll: () => Promise<T[]>;

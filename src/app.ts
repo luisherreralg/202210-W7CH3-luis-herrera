@@ -10,12 +10,15 @@ app.use(morgan('dev'));
 app.use(cors());
 app.use(express.json());
 const template = `
-    <body>
+    <body style='align'>
         <h1>API REST</h1>
         <h2>Endpoints</h2>
         <ul>
-            <li>/things</li>
-            <li>/things/:id</li>
+            <li><p>/things</p></li>
+            <li><p>/things/get/id</p></li>
+            <li><p>/things/post</p></li>
+            <li><p>/things/patch/id</p></li>
+            <li><p>/things/delete/id</p></li>
         </ul>
     </body>
     `;

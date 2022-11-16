@@ -1,6 +1,6 @@
 export type Thing = {
     title: string;
-    id: number;
+    id: string;
 };
 
 export type Things = {
